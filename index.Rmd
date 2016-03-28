@@ -1,0 +1,127 @@
+---
+title       : "Principal Component Analysis explained"
+subtitle    : 
+author      : Khristian Kotov
+job         : 
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+github:
+  user: kkotov 
+  repo: talks
+url:
+  lib:    ../libraries
+  assets: ../assets
+widgets     : [mathjax]     # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+
+## Introduction
+
+Principal component analysis (PCA) is by far one of the most important tools of data analysis.
+Thanks to an intuitive R built-in `prcomp` function I never had to remember related
+undergraduate-level linear algebra material. If someone asked me what the principle components are,
+I'd answer that these are the directions of maximum variation of the data, but wouldn't say more.
+So I decided to reduce my ignorance and review the method in more detail.
+
+On the following pages we assume:
+* vectors (or points) in $d$-dimensional space are $d \times 1$ matrices (i.e. columns)
+* the data are centered (otherwise we can always shift the origin)
+
+--- .class #id
+
+## PCA in a nutshell
+
+Formulation of the problem:
+
+* An $n \times d$ matrix $X$ is a data set of $n$ points $\mathbf{x}^T$ (rows) in $d$-dimensional space (columns).
+
+* We need to find a smaller subspace that captures most of the variance of $X$
+(i.e. if our points sit on a line, this line is sufficient to describe all of our data). 
+
+Solution:
+
+* Let $\mathbf{v}$ is a unit vector defining some $1D$ subspace 
+
+* Projections of points $\mathbf{x}$ on $\mathbf{v}$ are given by vector $X\mathbf{v}$; for centered data $\sum X\mathbf{v} = 0$
+
+* Easy to see that $\mathbf{v}$ maximizing the variance $\sigma_\mathbf{v}^2 = \frac{1}{n-1}\sum|X\mathbf{v}|^2 = \frac{1}{n-1} \mathbf{v}^T \sum X^T X \mathbf{v}$ 
+is an eigenvector of the covariance matrix: $\left(\frac{1}{n-1} \sum X^T X\right) \mathbf{v} = \sigma_\mathbf{v}^2 \mathbf{v}$
+
+* $d$ eigenvectors is an orthonormal basis; vectors with high eigenvalues capture more variance
+
+--- .class #id
+
+
+## Rotation of the basis
+
+Each point $\mathbf{x}_i$ can be decomposed in basis of eigenvector $\mathbf{v}_j$ such that: $\mathbf{x}_i = \sum_{j=0}^d p_{ij} \mathbf{v}_j$
+
+Projections $p_{ij}$ are proportional to $\sigma_j$ and can be further decomposed as: $p_{ij} = u_{ij} \sigma_j$ 
+
+Now it takes the canonical form known as Singular Value Decomposition (SVD): $X = U D V^T$
+
+If $X$ is degenerate our basis $\mathbf{v}$ reduces to just $r$ vectors, where $r$ is the rank of $X$
+
+Terminology:
+
+* $V$ is referred to as left singular vectors also known as principal components 
+* $D$, the singular values, are just square-rooted variances along the matrix diagonal
+* $U$, the right singular vectors, also an orthonormal set with little practical importance here
+* $P = U D$ are known as scores
+
+For simplicity assume SVD is a rotation to axises ordered to capture most of the data spread
+
+--- .class #id
+
+## Practical demonstration in R (1)
+
+Let us first generate multivariate gaussians with strong correlation:
+
+```{r, fig.height=5., fig.width=5., fig.align = 'center', comment = NA, message = F, echo = T}
+require(MASS)
+xy <- mvrnorm( 1000000, c(1,2), matrix(c(3,2,2,4),ncol=2) )
+plot(xy[sample(nrow(xy),10000),], xlab="x", ylab="y", pch=1)
+```
+
+--- .class #id
+
+## Practical demonstration in R (2)
+
+Standartize the data and the new basis maximizing the variance:
+
+```{r, fig.height=5., fig.width=5., fig.align = 'center', comment = NA, message = F, echo = T}
+std <- scale(xy) # same as x' <- (x-mean(x))/sd(x); y' <- (y-mean(y))/sd(y)
+plot( std[ sample(nrow(std),10000), ], xlab="x'", ylab="y'", pch=1)
+v <- eigen( cov(std) )$vectors
+abline(0, v[1,2]/v[1,1], col='red'); abline(0, v[2,2]/v[2,1], col='red');
+```
+
+--- .class #id
+
+## Practical demonstration in R (3)
+
+Calculate the scores manually:
+
+```{r, comment = NA, message = F, echo = T}
+std[1,] %*% eigen( cov(std) )$vectors
+```
+
+and see that these scores are identical (up to a sign) to what is returned by the `prcomp`:
+
+```{r, comment = NA, message = F, echo = T}
+prcomp(xy,retx=T,scale=T)$x[1,]
+```
+
+--- .class #id
+
+
+## Summary
+
+
+Some useful links:
+
+http://www.cs.princeton.edu/courses/archive/spring12/cos598C/svdchapter.pdf
+http://statmath.wu.ac.at/~hornik/QFS1/principal_component-vignette.pdf
+
