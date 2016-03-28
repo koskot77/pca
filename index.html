@@ -140,7 +140,7 @@ plot(xy[sample(nrow(xy),10000),], xlab=&quot;x&quot;, ylab=&quot;y&quot;, pch=1)
     <h2>Practical demonstration in R (2)</h2>
   </hgroup>
   <article data-timings="">
-    <p>Standartize the data and the new basis maximizing the variance:</p>
+    <p>Standartize the data and find new basis maximizing the variance:</p>
 
 <pre><code class="r">std &lt;- scale(xy) # same as x&#39; &lt;- (x-mean(x))/sd(x); y&#39; &lt;- (y-mean(y))/sd(y)
 plot( std[ sample(nrow(std),10000), ], xlab=&quot;x&#39;&quot;, ylab=&quot;y&#39;&quot;, pch=1)
