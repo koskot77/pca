@@ -75,6 +75,14 @@ For simplicity assume SVD is a rotation to axises ordered to capture most of the
 
 --- .class #id
 
+## SVD matrix multiplication
+
+<br>
+
+<img class=center src=pca.svg>
+
+--- .class #id
+
 ## Practical demonstration in R (1)
 
 Let us first generate multivariate gaussians with strong correlation:
@@ -89,7 +97,7 @@ plot(xy[sample(nrow(xy),10000),], xlab="x", ylab="y", pch=1)
 
 ## Practical demonstration in R (2)
 
-Standartize the data and the new basis maximizing the variance:
+Standardize the data and find new basis maximizing the variance:
 
 ```{r, fig.height=5., fig.width=5., fig.align = 'center', comment = NA, message = F, echo = T}
 std <- scale(xy) # same as x' <- (x-mean(x))/sd(x); y' <- (y-mean(y))/sd(y)
@@ -119,6 +127,9 @@ prcomp(xy,retx=T,scale=T)$x[1,]
 
 ## Summary
 
+It is more practical to find eigenvectors of correlation rather than covariance matrix.
+In the first case sampling errors cancel precisely on the diagonal and reduced for the
+off-diagonal elements. If sample is sufficiently big the difference is of course negligible.
 
 Some useful links:
 

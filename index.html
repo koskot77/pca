@@ -119,6 +119,19 @@ is an eigenvector of the covariance matrix: \(\left(\frac{1}{n-1} \sum X^T X\rig
 
 <slide class="class" id="id" style="background:;">
   <hgroup>
+    <h2>SVD matrix multiplication</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><br></p>
+
+<p><img class=center src=pca.svg></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
     <h2>Practical demonstration in R (1)</h2>
   </hgroup>
   <article data-timings="">
@@ -140,7 +153,7 @@ plot(xy[sample(nrow(xy),10000),], xlab=&quot;x&quot;, ylab=&quot;y&quot;, pch=1)
     <h2>Practical demonstration in R (2)</h2>
   </hgroup>
   <article data-timings="">
-    <p>Standartize the data and find new basis maximizing the variance:</p>
+    <p>Standardize the data and find new basis maximizing the variance:</p>
 
 <pre><code class="r">std &lt;- scale(xy) # same as x&#39; &lt;- (x-mean(x))/sd(x); y&#39; &lt;- (y-mean(y))/sd(y)
 plot( std[ sample(nrow(std),10000), ], xlab=&quot;x&#39;&quot;, ylab=&quot;y&#39;&quot;, pch=1)
@@ -165,7 +178,7 @@ abline(0, v[1,2]/v[1,1], col=&#39;red&#39;); abline(0, v[2,2]/v[2,1], col=&#39;r
 </code></pre>
 
 <pre><code>          [,1]      [,2]
-[1,] -1.097818 0.7356172
+[1,] -1.323191 0.3167514
 </code></pre>
 
 <p>and see that these scores are identical (up to a sign) to what is returned by the <code>prcomp</code>:</p>
@@ -174,7 +187,7 @@ abline(0, v[1,2]/v[1,1], col=&#39;red&#39;); abline(0, v[2,2]/v[2,1], col=&#39;r
 </code></pre>
 
 <pre><code>       PC1        PC2 
--1.0978184  0.7356172 
+-1.3231911  0.3167514 
 </code></pre>
 
   </article>
@@ -186,7 +199,11 @@ abline(0, v[1,2]/v[1,1], col=&#39;red&#39;); abline(0, v[2,2]/v[2,1], col=&#39;r
     <h2>Summary</h2>
   </hgroup>
   <article data-timings="">
-    <p>Some useful links:</p>
+    <p>It is more practical to find eigenvectors of correlation rather than covariance matrix.
+In the first case sampling errors cancel precisely on the diagonal and reduced for the
+off-diagonal elements. If sample is sufficiently big the difference is of course negligible.</p>
+
+<p>Some useful links:</p>
 
 <p><a href="http://www.cs.princeton.edu/courses/archive/spring12/cos598C/svdchapter.pdf">http://www.cs.princeton.edu/courses/archive/spring12/cos598C/svdchapter.pdf</a>
 <a href="http://statmath.wu.ac.at/%7Ehornik/QFS1/principal_component-vignette.pdf">http://statmath.wu.ac.at/~hornik/QFS1/principal_component-vignette.pdf</a></p>
@@ -219,26 +236,32 @@ abline(0, v[1,2]/v[1,1], col=&#39;red&#39;); abline(0, v[2,2]/v[2,1], col=&#39;r
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=4 title='Practical demonstration in R (1)'>
+        data-slide=4 title='SVD matrix multiplication'>
          4
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=5 title='Practical demonstration in R (2)'>
+        data-slide=5 title='Practical demonstration in R (1)'>
          5
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=6 title='Practical demonstration in R (3)'>
+        data-slide=6 title='Practical demonstration in R (2)'>
          6
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=7 title='Summary'>
+        data-slide=7 title='Practical demonstration in R (3)'>
          7
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=8 title='Summary'>
+         8
       </a>
     </li>
   </ul>
@@ -263,7 +286,7 @@ abline(0, v[1,2]/v[1,1], col=&#39;red&#39;); abline(0, v[2,2]/v[2,1], col=&#39;r
   <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
   <!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
   </script> -->
-  <script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="../libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+  <script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="../DevDataProducts/libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
 </script>
 <!-- LOAD HIGHLIGHTER JS FILES -->
   <script src="../DevDataProducts/libraries/highlighters/highlight.js/highlight.pack.js"></script>
